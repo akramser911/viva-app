@@ -23,7 +23,9 @@ mongoose.connect("mongodb+srv://akramser:Dzgamer12@cluster0.gzbhhcb.mongodb.net/
 
 app.use([bodyParser.urlencoded({extended : true}), express.json()]);
 app.use('/projects', projectRoute);
-
+app.get('/', (req,res)=>{
+    res.sendStatus(200);
+});
 
 
 module.exports = app;
