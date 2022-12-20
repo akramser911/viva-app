@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const mongoose = require ('mongoose');
 const bodyParser = require('body-parser');
-const productRoute = require('./route/products');
+//const productRoute = require('./route/products');
+const projectRoute = require('./route/projects');
 
 
 
@@ -21,7 +22,7 @@ mongoose.connect("mongodb+srv://akramser:Dzgamer12@cluster0.gzbhhcb.mongodb.net/
 
 
 app.use([bodyParser.urlencoded({extended : true}), express.json()]);
-app.use('/products', productRoute);
+app.use('/projects', projectRoute);
 
 
 

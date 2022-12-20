@@ -16,15 +16,17 @@ module.exports = {
     },
 
     insertProduct : async (req, res)=>{
-        const product = await new PRODUCTS ({
+        try {const product = await new PRODUCTS ({
             name : req.body.name,
             price : req.body.price,
             desc : req.body.desc,
 
         }).save()
         res.json({"message" : "inserted successfully",
-    id : product.id,
-name : product.name})
+            id : product.id,
+            name : product.name})}catch(err) {
+                res.json({error : err.errors.name.message});
+            }
     },
 
     deleteProducts : async (req, res)=> {
