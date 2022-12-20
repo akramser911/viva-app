@@ -31,5 +31,11 @@ name : product.name})
         const id = req.params.id;
         const del = await PRODUCTS.findByIdAndRemove(id);
         res.json({"delete" : del});
+    },
+
+    getElement : async (req, res)=> {
+        const id = req.params.id;
+        const product = await PRODUCTS.findById(id);
+        res.json({product});
     }
 }
