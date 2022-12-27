@@ -17,7 +17,29 @@ module.exports = {
                     finalMark : res.finalMark,
                     studentOne : res.studentOne,
                     studentTwo : res.studentTwo,
-                    studentThree : res.studentThree
+                    studentThree : res.studentThree,
+                    owner : req.body.owner
+                }
+            })
+        })
+    },
+    getProjectsByTeacher : async (req, res, next)=>{
+        const projects = await PROJECTS.find({owner : req.params.id});
+        res.json({
+            result : projects.map(res =>{
+                return {
+                    id : res.id,
+                    superName : res.superName,
+                    superMark : res.superMark,
+                    presName : res.presName,
+                    presMark : res.presMark,
+                    examName : res.examName,
+                    examMark : res.examMark,
+                    finalMark : res.finalMark,
+                    studentOne : res.studentOne,
+                    studentTwo : res.studentTwo,
+                    studentThree : res.studentThree,
+                    owner : req.body.owner
                 }
             })
         })
@@ -34,7 +56,8 @@ module.exports = {
                     finalMark : req.body.finalMark,
                     studentOne : req.body.studentOne,
                     studentTwo : req.body.studentTwo,
-                    studentThree : req.body.studentThree
+                    studentThree : req.body.studentThree,
+                    owner : req.body.owner
 
         }).save()
         res.json({"message" : "inserted successfully",

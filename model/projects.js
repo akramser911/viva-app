@@ -10,7 +10,8 @@ const projects = mongoose.Schema({
     finalMark : {type : Number},
     studentOne : {type : String},
     studentTwo : {type : String},
-    studentThree : {type : String}
+    studentThree : {type : String},
+    owner : {type: mongoose.Types.ObjectId, ref: "User"}
 })
 
 module.exports = mongoose.model('PROJECTS', projects);

@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 //const productRoute = require('./route/products');
 const projectRoute = require('./route/projects');
 
+const userRoute = require('./route/users');
+const authRoute = require('./route/auth');
 
 
 
@@ -22,6 +24,9 @@ mongoose.connect("mongodb+srv://akramser:Dzgamer12@cluster0.gzbhhcb.mongodb.net/
 
 
 app.use([bodyParser.urlencoded({extended : true}), express.json()]);
+app.use('/auth', authRoute);
+app.use('/users', userRoute);
+
 app.use('/projects', projectRoute);
 app.get('/', (req,res)=>{
     res.sendStatus(200);
