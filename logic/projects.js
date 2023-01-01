@@ -1,9 +1,10 @@
 const { json } = require("body-parser");
 const PROJECTS = require("../model/projects");
+const nodemailer = require('nodemailer');
 
 module.exports = {
     getProjects : async (req, res, next)=>{
-        const projects = await PROJECTS.find();
+        try {const projects = await PROJECTS.find();
         res.json({
             result : projects.map(res =>{
                 return {
@@ -21,7 +22,9 @@ module.exports = {
                     owner : req.body.owner
                 }
             })
-        })
+        })}catch(err){
+            res.json({"message" : "inserted successfully"});
+        }
     },
     getProjectsByTeacher : async (req, res, next)=>{
         const projects = await PROJECTS.find({owner : req.params.id});
@@ -46,6 +49,10 @@ module.exports = {
     },
 
     insertProjects : async (req, res)=>{
+        const email = req.params.email;
+        console.log(email);
+        
+        
         try {const project = await new PROJECTS ({
                     superName : req.body.superName,
                     superMark : req.body.superMark,
@@ -61,11 +68,42 @@ module.exports = {
 
         }).save()
         res.json({"message" : "inserted successfully",
-                    id : project.id
+                    id : project._id
         
-        })}catch(err) {
+        })
+        const transporter = nodemailer.createTransport({
+            service: 'hotmail',
+            auth :{
+              user : 'akramsviva@outlook.com',
+              pass : "azerty12"
+            }  
+          });
+          
+          const options = {
+              from : "akramsviva@outlook.com",
+              to : email,
+              subject : "VIVA PROJECT DETAILS",
+              text :"Dear teacher, here is the result of your insertion"+"\n\n"+
+                "Examinator name : " + req.body.examName +"\n"+ "Examinator mark : " + req.body.examMark +"\n"+
+                "President name : " + req.body.presName +"\n" + "President mark : " + req.body.presMark +"\n" +
+                "Supervisor name : " + req.body.superName +"\n" + "Supervisor mark : " + req.body.superMark +"\n"+
+                "Student one : " + req.body.studentOne +"\n"+
+                "Student two : " + req.body.studentTwo +"\n"+
+                "Student three : " + req.body.studentThree +"\n"+
+                "final mark : " + req.body.finalMark+"\n" 
+          }
+          
+          transporter.sendMail(options, function (err, info){
+              if(err){
+                  console.log(err);
+                  return;
+              }
+              console.log('Sent : ' +info.response);
+          })
+    }catch(err) {
                 res.json({error : err.errors.name.message});
             }
+         
     },
 
     deleteProjects : async (req, res)=> {
