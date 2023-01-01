@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
 const projects = mongoose.Schema({
+    projectName : {type : String},
+    year : {type : Number},
     superName : {type : String},
     superMark : {type : Number},
     presName : {type : String},

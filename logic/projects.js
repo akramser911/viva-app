@@ -8,6 +8,8 @@ module.exports = {
         res.json({
             result : projects.map(res =>{
                 return {
+                    projectName : res.projectName,
+                    year : res.year,
                     id : res.id,
                     superName : res.superName,
                     superMark : res.superMark,
@@ -31,6 +33,8 @@ module.exports = {
         res.json({
             result : projects.map(res =>{
                 return {
+                    projectName : res.projectName,
+                    year : res.year,
                     id : res.id,
                     superName : res.superName,
                     superMark : res.superMark,
@@ -54,6 +58,8 @@ module.exports = {
         
         
         try {const project = await new PROJECTS ({
+                    projectName : req.body.projectName,
+                    year : req.body.year,
                     superName : req.body.superName,
                     superMark : req.body.superMark,
                     presName : req.body.presName,
@@ -90,7 +96,8 @@ module.exports = {
                 "Student one : " + req.body.studentOne +"\n"+
                 "Student two : " + req.body.studentTwo +"\n"+
                 "Student three : " + req.body.studentThree +"\n"+
-                "final mark : " + req.body.finalMark+"\n" 
+                "Final mark : " + req.body.finalMark+"\n" +
+                "Year : " + req.body.year+"\n" 
           }
           
           transporter.sendMail(options, function (err, info){
