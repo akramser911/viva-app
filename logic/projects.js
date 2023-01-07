@@ -57,117 +57,124 @@ module.exports = {
         })
     },
 
-    insertProjects : async (req, res)=>{
+    insertProjects: async (req, res) => {
+      try {
         const email = req.params.email;
         console.log(email);
-        
-        
-        try {const project = await new PROJECTS ({
-                    projectName : req.body.projectName,
-                    year : req.body.year,
-                    superName : req.body.superName,
-                    superMark : req.body.superMark,
-                    presName : req.body.presName,
-                    presMark : req.body.presMark,
-                    examName : req.body.examName,
-                    examMark : req.body.examMark,
-                    finalMark : req.body.finalMark,
-                    studentOne : req.body.studentOne,
-                    studentTwo : req.body.studentTwo,
-                    studentThree : req.body.studentThree,
-                    owner : req.body.owner
-
-        }).save()
-        res.json({"message" : "inserted successfully",
-                    id : project._id
-        
-        })
+        const project = await new PROJECTS({
+          projectName: req.body.projectName,
+          year: req.body.year,
+          superName: req.body.superName,
+          superMark: req.body.superMark,
+          presName: req.body.presName,
+          presMark: req.body.presMark,
+          examName: req.body.examName,
+          examMark: req.body.examMark,
+          finalMark: req.body.finalMark,
+          studentOne: req.body.studentOne,
+          studentTwo: req.body.studentTwo,
+          studentThree: req.body.studentThree,
+          owner: req.body.owner,
+        }).save();
+    
         var option = {
           format: "A4",
           orientation: "portrait",
           border: "10mm",
-      };
-      var users = [
-          {
-            name: "Shyam",
-            age: "26",
-          },
-          {
-            name: "Navjot",
-            age: "26",
-          },
-          {
-            name: "Vitthal",
-            age: "26",
-          },
-        ];
-      var document = {
+        };
+    
+        var document = {
           html: html,
           data: {
-            users: users,
-            studentOne : req.body.studentOne,
-            studentTwo : req.body.studentTwo,
-            studentThree : req.body.studentThree,
-            titre:req.body.projectName,
-            encadreur:req.body.superName,
-            president : req.body.presName,
-            examinateur : req.body.examName,
-            mark: req.body.finalMark
+            studentOne: req.body.studentOne,
+            studentTwo: req.body.studentTwo,
+            studentThree: req.body.studentThree,
+            titre: req.body.projectName,
+            encadreur: req.body.superName,
+            president: req.body.presName,
+            examinateur: req.body.examName,
+            mark: req.body.finalMark,
           },
           path: "./output.pdf",
           type: "",
         };
-      try {
-          pdf.create(document, option).then((res) => {
-          console.log(res);
-        }).catch((error) => {
-          console.error(error);
-        });
-      }catch(e){
-          console.log(e);
-      }
-        const transporter = nodemailer.createTransport({
-            service: 'hotmail',
-            auth :{
-              user : 'viva.app@outlook.com',
-              pass : "Azerty12"
-            }  
-          });
-          
-          const options = {
-            
-              from : "viva.app@outlook.com",
-              to : email,
-              subject : "VIVA PROJECT DETAILS",
-              text :"Dear teacher, here is the result of your insertion"+"\n\n"+
-                "Examinator name : " + req.body.examName +"\n"+ "Examinator mark : " + req.body.examMark +"\n"+
-                "President name : " + req.body.presName +"\n" + "President mark : " + req.body.presMark +"\n" +
-                "Supervisor name : " + req.body.superName +"\n" + "Supervisor mark : " + req.body.superMark +"\n"+
-                "Student one : " + req.body.studentOne +"\n"+
-                "Student two : " + req.body.studentTwo +"\n"+
-                "Student three : " + req.body.studentThree +"\n"+
-                "Final mark : " + req.body.finalMark+"\n" +
-                "Year : " + req.body.year+"\n" ,
-
-                attachments : [
-                  {
-                    path: "./output.pdf"
-                  }
-                ],
-                
-           }
-          
-          
-          transporter.sendMail(options, function (err, info){
-              if(err){
-                  console.log(err);
-                  return;
+    
+        pdf
+          .create(document, option)
+          .then((res) => {
+            const transporter = nodemailer.createTransport({
+              service: "hotmail",
+              auth: {
+                user: "viva.app@outlook.com",
+                pass: "Azerty12",
+              },
+            });
+    
+            const options = {
+              from: "viva.app@outlook.com",
+              to: email,
+              subject: "VIVA PROJECT DETAILS",
+              text:
+                "Dear teacher, here is the result of your insertion" +
+                "\n\n" +
+                "Examinator name : " +
+                req.body.examName +
+                "\n" +
+                "Examinator mark : " +
+                req.body.examMark +
+                "\n" +
+                "President name : " +
+                req.body.presName +
+                "\n" +
+                "President mark : " +
+                req.body.presMark +
+                "\n" +
+                "Supervisor name : " +
+                req.body.superName +
+                "\n" +
+                "Supervisor mark : " +
+                req.body.superMark +
+                "\n" +
+                "Student one : " +
+                req.body.studentOne +
+                "\n" +
+                "Student two : " +
+                req.body.studentTwo +
+                "\n" +
+                "Student three : " +
+                req.body.studentThree +
+                "\n" +
+                "Final mark : " +
+                req.body.finalMark +
+                "\n" +
+                "Year : " +
+                req.body.year +
+                "\n",
+    
+              attachments: [
+                {
+                  path: "./output.pdf",
+                },
+              ],
+            };
+    
+            transporter.sendMail(options, function (err, info) {
+              if (err) {
+                console.log(err);
+                return;
               }
-              console.log('Sent : ' +info.response);
+              console.log("Sent : " + info.response);
+            });
+    
+            res.json({ message: "inserted successfully", id: project._id });
           })
-    }catch(err) {
-                res.json({error : err.errors.name.message});
-            }
+          .catch((error) => {
+            console.error(error);
+            return res.json({ error: error });
+          });
+      } catch (err) {
+        res.json({ error: err.errors.name.message });
+      }
     },
 
     deleteProjects : async (req, res)=> {
