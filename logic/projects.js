@@ -2,6 +2,11 @@ const { json } = require("body-parser");
 const PROJECTS = require("../model/projects");
 const nodemailer = require('nodemailer');
 
+var pdf = require("pdf-creator-node");
+var fs = require("fs");
+
+var html = fs.readFileSync("file.html", "utf8");
+
 module.exports = {
     getProjects : async (req, res, next)=>{
         try {const projects = await PROJECTS.find();
@@ -77,16 +82,61 @@ module.exports = {
                     id : project._id
         
         })
+        var option = {
+          format: "A4",
+          orientation: "portrait",
+          border: "10mm",
+      };
+      var users = [
+          {
+            name: "Shyam",
+            age: "26",
+          },
+          {
+            name: "Navjot",
+            age: "26",
+          },
+          {
+            name: "Vitthal",
+            age: "26",
+          },
+        ];
+      var document = {
+          html: html,
+          data: {
+            users: users,
+            studentOne : req.body.studentOne,
+            studentTwo : req.body.studentTwo,
+            studentThree : req.body.studentThree,
+            titre:req.body.projectName,
+            encadreur:req.body.superName,
+            president : req.body.presName,
+            examinateur : req.body.examName,
+            mark: req.body.finalMark
+          },
+          path: "./output.pdf",
+          type: "",
+        };
+      try {
+          pdf.create(document, option).then((res) => {
+          console.log(res);
+        }).catch((error) => {
+          console.error(error);
+        });
+      }catch(e){
+          console.log(e);
+      }
         const transporter = nodemailer.createTransport({
             service: 'hotmail',
             auth :{
-              user : 'akramsviva@outlook.com',
-              pass : "azerty12"
+              user : 'viva.app@outlook.com',
+              pass : "Azerty12"
             }  
           });
           
           const options = {
-              from : "akramsviva@outlook.com",
+            
+              from : "viva.app@outlook.com",
               to : email,
               subject : "VIVA PROJECT DETAILS",
               text :"Dear teacher, here is the result of your insertion"+"\n\n"+
@@ -97,8 +147,16 @@ module.exports = {
                 "Student two : " + req.body.studentTwo +"\n"+
                 "Student three : " + req.body.studentThree +"\n"+
                 "Final mark : " + req.body.finalMark+"\n" +
-                "Year : " + req.body.year+"\n" 
-          }
+                "Year : " + req.body.year+"\n" ,
+
+                attachments : [
+                  {
+                    path: "./output.pdf"
+                  }
+                ],
+                
+           }
+          
           
           transporter.sendMail(options, function (err, info){
               if(err){
@@ -110,7 +168,6 @@ module.exports = {
     }catch(err) {
                 res.json({error : err.errors.name.message});
             }
-         
     },
 
     deleteProjects : async (req, res)=> {
