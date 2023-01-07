@@ -101,17 +101,20 @@ module.exports = {
     
         pdf
           .create(document, option)
-          .then((res) => {
+          .then(() => {
             const transporter = nodemailer.createTransport({
-              service: "hotmail",
+              //service: "hotmail",
+              host: "smtp.gmail.com",
+              port:465,
+              secure:true,
               auth: {
-                user: "viva.app@outlook.com",
-                pass: "Azerty12",
+                user: "gasra.app@gmail.com",
+                pass: "dmmswqbloyyprzsn",
               },
             });
     
             const options = {
-              from: "viva.app@outlook.com",
+              from: "gasra.app@gmail.com",
               to: email,
               subject: "VIVA PROJECT DETAILS",
               text:
