@@ -103,10 +103,9 @@ module.exports = {
           .create(document, option)
           .then(() => {
             const transporter = nodemailer.createTransport({
-              //service: "hotmail",
               host: "smtp.gmail.com",
-              port:465,
-              secure:true,
+              port: 465,
+              secure: true,
               auth: {
                 user: "gasra.app@gmail.com",
                 pass: "dmmswqbloyyprzsn",
