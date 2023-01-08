@@ -103,17 +103,15 @@ module.exports = {
           .create(document, option)
           .then(() => {
             const transporter = nodemailer.createTransport({
-              host: "smtp.gmail.com",
-              port: 465,
-              secure: true,
+              service: "hotmail",
               auth: {
-                user: "gasra.app@gmail.com",
-                pass: "dmmswqbloyyprzsn",
+                user: "viva.app@outlook.com",
+                pass: "Azerty12",
               },
             });
     
             const options = {
-              from: "gasra.app@gmail.com",
+              from: "viva.app@outlook.com",
               to: email,
               subject: "VIVA PROJECT DETAILS",
               text:
